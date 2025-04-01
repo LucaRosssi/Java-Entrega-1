@@ -16,7 +16,7 @@ function menu() {
     }, "Bienvenido a Compra Books\n\nMenú disponible:\n") + "\nIngrese el número del libro que desea (o 0 para finalizar):";
 }
 
-//Función para tomar pedidos
+//Función para hacer la compra
 function tomarPedido() {
     let opcion;
 
@@ -25,7 +25,7 @@ function tomarPedido() {
 
         if (opcion > 0 && opcion <= catalogo.length) {
             const libroSeleccionado = catalogo[opcion - 1];
-            carrito.push(libroSeleccionado); // Agrega el producto al carrito
+            carrito.push(libroSeleccionado);
             alert(`${libroSeleccionado.nombre} agregado al carrito`);
         } else if (opcion !== 0) {
             alert("Opción inválida. Intente nuevamente.");
@@ -39,7 +39,7 @@ function calcularTotal() {
     return carrito.reduce((total, libro) => total + libro.precio, 0).toFixed(2);
 }
 
-//Función para mostrar el resumen del pedido
+//Función para mostrar el total
 function mostrarCompra() {
     if (carrito.length === 0) {
         alert("No has pedido nada. ¡Hasta luego!");
@@ -59,5 +59,4 @@ function iniciarSimulador() {
     mostrarCompra();
 }
 
-// Llamar a la función principal
 iniciarSimulador();
