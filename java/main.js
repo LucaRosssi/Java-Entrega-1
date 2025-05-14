@@ -53,25 +53,58 @@ function guardarEnLocalStorage(producto) {
 const btnComprar = document.getElementById("comprar-carrito");
 
 btnComprar.addEventListener("click", () => {
-    if (listaCarrito.children.length === 0) {
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    if (carrito.length === 0) {
         Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "Su carrito está vacío"});
+            icon: "info",
+            title: "El carrito está vacío",
+            text: "Agregá productos antes de comprar."
+        });
         return;
     }
 
-    Swal.fire({
-        title: "Gracias por su compra",
-        icon: "success",
-        draggable: true
-    });
+    // Simular envío del carrito con fetch
+    fetch("https://jsonplaceholder.typicode.com/posts", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            usuario: "cliente-demo",
+            productos: carrito,
+            total: total
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error al enviar los datos");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Respuesta simulada:", data);
 
-    // Vaciar el carrito y reiniciar el total
-    listaCarrito.innerHTML = "";
-    total = 0;
-    totalElemento.textContent = total;
-    localStorage.removeItem("carrito");
+        Swal.fire({
+            icon: "success",
+            title: "¡Compra realizada!",
+            text: "Gracias por tu compra"
+        });
+
+        // Limpiar carrito
+        listaCarrito.innerHTML = "";
+        total = 0;
+        totalElemento.textContent = total;
+        localStorage.removeItem("carrito");
+    })
+    .catch(error => {
+        console.error("Error al simular la compra:", error);
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "No se pudo completar la compra. Intentalo de nuevo."
+        });
+    });
 });
 
 const btnVaciar = document.getElementById("vaciar-carrito");
